@@ -1,0 +1,45 @@
+CMAKE_MINIMUM_REQUIRED( VERSION 3.1 )
+PROJECT( bev_loca )
+
+set(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_COMPILER "g++")
+SET( CMAKE_BUILD_TYPE Debug  )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -pthread -fopenmp")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -no-pie")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -no-pie")
+#SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+#SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/include )
+INCLUDE_DIRECTORIES("/usr/include/eigen3")
+message(${PROJECT_SOURCE_DIR})
+
+# 增加PCL库的依赖
+FIND_PACKAGE( PCL REQUIRED)
+list(REMOVE_ITEM PCL_LIBRARIES "vtkproj4") # use this in Ubuntu 16.04
+
+# 增加opencv的依赖
+FIND_PACKAGE( OpenCV REQUIRED )
+
+# 添加头文件和库文件
+ADD_DEFINITIONS( ${PCL_DEFINITIONS} )
+INCLUDE_DIRECTORIES( ${PCL_INCLUDE_DIRS}  )
+message(${PCL_INCLUDE_DIRS})
+LINK_LIBRARIES( ${PCL_LIBRARY_DIRS} )
+
+
+ADD_EXECUTABLE( bev_loca ${PROJECT_SOURCE_DIR}/src/main.cpp
+${PROJECT_SOURCE_DIR}/src/hd_map.cpp
+${PROJECT_SOURCE_DIR}/src/converter.cpp
+${PROJECT_SOURCE_DIR}/src/bev_frame.cpp
+${PROJECT_SOURCE_DIR}/src/bev_relocalizer.cpp
+${PROJECT_SOURCE_DIR}/src/local_perception.cpp
+${PROJECT_SOURCE_DIR}/src/for_simulation.cpp)
+
+TARGET_LINK_LIBRARIES( bev_loca ${OpenCV_LIBS} ${PCL_LIBRARIES})
+
+
+
+
+
+
