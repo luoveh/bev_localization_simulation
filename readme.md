@@ -2,11 +2,13 @@
 
 ## build&Run:
 依赖opencv， pcl，eigen，安装好后，下载代码，进入根目录：
+
+```
 mkdir build
 cd build
 cmake ..
 make
-
+```
 
 
 
